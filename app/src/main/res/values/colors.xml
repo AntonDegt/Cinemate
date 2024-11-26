@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="login_bg">#284345</color>
+    <color name="login_text_color">#1E8E95</color>
+    <color name="login_text_color_light">#98C4CA</color>
+    <color name="login_text_color_cyan">#46C2D3</color>
+    <color name="error">#EB685E</color>
+</resources>

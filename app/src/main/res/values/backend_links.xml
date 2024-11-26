@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="signupuser">      https://backend.cinemate.pp.ua/api/signupuser   </string>
+    <string name="auth">            https://backend.cinemate.pp.ua/api/auth         </string>
+    <string name="categories">      https://backend.cinemate.pp.ua/api/Categories   </string>
+    <string name="subcategories">   https://backend.cinemate.pp.ua/api/Categories/  </string>
+                                                                            <!-- {categoryId} -->
+    <string name="movies">          https://backend.cinemate.pp.ua/api/movies       </string>
+                                                                            <!-- categoryId={categoryId} -->
+                                                                            <!-- subcategoryId={subcategoryId} -->
+    <string name="movie">           https://backend.cinemate.pp.ua/api/movies/      </string>
+                                                                            <!-- {movieId} -->
+</resources>

@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/login_bg"
+    tools:context=".LoginActivity">
+
+    <!-- Контейнер для управления состояниями -->
+    <FrameLayout
+        android:id="@+id/loginContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Состояние выбора метода входа -->
+        <LinearLayout
+            android:id="@+id/chooseMethodLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                tools:ignore="UselessParent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="16dp"
+                    android:paddingHorizontal="50dp"
+                    android:orientation="vertical">
+
+                    <!-- Логотип -->
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_horizontal"
+                        android:contentDescription="@string/netflix_logo"
+                        android:src="@drawable/cinemate" />
+
+                    <!-- Текст заголовка -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/create_an_account"
+                        android:textColor="@color/login_text_color"
+                        android:textSize="24sp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center" />
+
+
+                    <!-- Кнопка входа через Google -->
+                    <LinearLayout
+                        android:onClick="onGoogleSignInClicked"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:background="@drawable/rounded_button"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:layout_marginTop="16dp">
+
+                        <!-- Иконка -->
+                        <ImageView
+                            android:id="@+id/googleIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_google"
+                            android:layout_marginEnd="8dp"
+                            tools:ignore="ContentDescription" />
+
+                        <!-- Текст -->
+                        <TextView
+                            android:id="@+id/googleButtonText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/continue_with_google"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                    <!-- Кнопка входа через Facebook -->
+                    <LinearLayout
+                        android:onClick="onFacebookSignInClicked"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:background="@drawable/rounded_button"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:layout_marginTop="16dp">
+
+                        <!-- Иконка -->
+                        <ImageView
+                            android:id="@+id/facebookIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_facebook"
+                            android:layout_marginEnd="8dp"
+                            tools:ignore="ContentDescription" />
+
+                        <!-- Текст -->
+                        <TextView
+                            android:id="@+id/facebookButtonText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/continue_with_facebook"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                    <!-- Кнопка входа через почту -->
+                    <LinearLayout
+                        android:onClick="onEmailSignInClicked"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:background="@drawable/rounded_button"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:layout_marginTop="16dp">
+
+                        <!-- Иконка -->
+                        <ImageView
+                            android:id="@+id/emailIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_email"
+                            android:layout_marginEnd="8dp"
+                            tools:ignore="ContentDescription" />
+
+                        <!-- Текст -->
+                        <TextView
+                            android:id="@+id/emailButtonText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/continue_with_email"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+
+                    <!-- Флажок согласия -->
+                    <CheckBox
+                        android:id="@+id/termsCheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/news_by_email"
+                        android:textColor="@color/login_text_color_light"
+                        android:layout_marginTop="16dp" />
+
+                    <!-- Ссылка на вход -->
+                    <TextView
+                        android:id="@+id/alreadyHaveAccount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/have_an_account"
+                        android:textColor="@color/login_text_color_light"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:layout_gravity="center_horizontal" />
+
+                    <TextView
+                        android:onClick="onBackToLoginClicked"
+                        android:id="@+id/logInText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/log_in"
+                        android:textColor="@color/login_text_color_cyan"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:layout_gravity="center_horizontal" />
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
+
+        <!-- Состояние входа -->
+        <LinearLayout
+            android:id="@+id/loginLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                tools:ignore="UselessParent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="16dp"
+                    android:paddingHorizontal="50dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center_horizontal"
+                        android:contentDescription="@string/netflix_logo"
+                        android:src="@drawable/cinemate" />
+
+                    <!-- Текст заголовка -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/log_in"
+                        android:textColor="@color/login_text_color"
+                        android:textSize="24sp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center" />
+
+                    <!-- Текст ошибки -->
+                    <TextView
+                        android:id="@+id/errorMessage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/wrong_email_or_password"
+                        android:textSize="14sp"
+                        android:textColor="@color/error"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:visibility="invisible"/>
+
+                    <!-- Поля ввода -->
+                    <EditText
+                        android:id="@+id/emailInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/email"
+                        android:inputType="textEmailAddress"
+                        android:backgroundTint="#FFFFFF"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#99FFFFFF"
+                        android:layout_marginTop="16dp"
+                        android:autofillHints="" />
+
+                    <EditText
+                        android:id="@+id/passwordInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/password"
+                        android:inputType="textPassword"
+                        android:backgroundTint="#FFFFFF"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#99FFFFFF"
+                        android:layout_marginTop="16dp"
+                        tools:ignore="Autofill" />
+
+                    <!-- Кнопка входа -->
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/loginButton"
+                        android:onClick="onLoginClicked"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAllCaps="false"
+                        android:text="@string/log_in"
+                        android:background="@drawable/rounded_button_solid"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="16dp" />
+
+                    <!-- Ссылка "Забыли пароль?" -->
+                    <TextView
+                        android:id="@+id/forgotPasswordLink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/forgot_your_password"
+                        android:textColor="@color/login_text_color_cyan"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:layout_gravity="center_horizontal" />
+
+                    <!-- Текст для реистрации -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginTop="16dp">
+
+                        <!-- Ссылка на регистрацию -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/dont_have_an_acccount"
+                            android:textColor="@color/login_text_color_light"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            android:layout_gravity="center_horizontal" />
+
+                        <TextView
+                            android:onClick="onRegisterLinkClicked"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/sign_up"
+                            android:textColor="@color/login_text_color_cyan"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:gravity="center"
+                            android:paddingStart="5dp"
+                            android:layout_gravity="center_horizontal"
+                            tools:ignore="RtlSymmetry" />
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+        <!-- Состояние регистрации -->
+        <LinearLayout
+            android:id="@+id/registrationLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="visible">
+
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                tools:ignore="UselessParent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="16dp"
+                    android:paddingHorizontal="50dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="70dp"
+                        android:layout_gravity="center_horizontal"
+                        android:contentDescription="@string/netflix_logo"
+                        android:src="@drawable/cinemate" />
+
+                    <!-- Текст заголовка -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/create_an_account"
+                        android:textColor="@color/login_text_color"
+                        android:textSize="24sp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:textAlignment="center"
+                        android:gravity="center" />
+
+
+                    <!-- Поля ввода -->
+                    <TextView
+                        android:id="@+id/errorMessageLogin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/error"
+                        android:gravity="center"
+                        android:visibility="gone"/>
+                    <EditText
+                        android:id="@+id/loginInputRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/login"
+                        android:inputType="textPersonName"
+                        android:backgroundTint="#FFFFFF"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#99FFFFFF"
+                        android:layout_marginBottom="16dp"
+                        android:autofillHints="" />
+
+                    <TextView
+                        android:id="@+id/errorMessageFirstName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/error"
+                        android:gravity="center"
+                        android:visibility="gone"/>
+                    <EditText
+                        android:id="@+id/firstNameInputRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/first_name"
+                        android:inputType="textPersonName"
+                        android:backgroundTint="#FFFFFF"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#99FFFFFF"
+                        android:layout_marginBottom="16dp"
+                        android:autofillHints="" />
+
+                    <TextView
+                        android:id="@+id/errorMessageSurname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/error"
+                        android:gravity="center"
+                        android:visibility="gone"/>
+                    <EditText
+                        android:id="@+id/surnameInputRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/surname"
+                        android:inputType="textPersonName"
+                        android:backgroundTint="#FFFFFF"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#99FFFFFF"
+                        android:layout_marginBottom="16dp"
+                        android:autofillHints="" />
+
+                    <TextView
+                        android:id="@+id/errorMessageEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/error"
+                        android:gravity="center"
+                        android:visibility="gone"/>
+                    <EditText
+                        android:id="@+id/emailInputRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/email"
+                        android:inputType="textEmailAddress"
+                        android:backgroundTint="#FFFFFF"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#99FFFFFF"
+                        android:layout_marginBottom="16dp"
+                        android:autofillHints="" />
+
+                    <TextView
+                        android:id="@+id/errorMessagePhoneNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/error"
+                        android:gravity="center"
+                        android:visibility="gone"/>
+                    <EditText
+                        android:id="@+id/phoneInputRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/phone_number"
+                        android:backgroundTint="#FFFFFF"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#99FFFFFF"
+                        android:layout_marginBottom="16dp"
+                        android:autofillHints=""
+                        android:inputType="text|number"
+                        tools:ignore="TextFields" />
+
+                    <TextView
+                        android:id="@+id/errorMessagePassword"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/error"
+                        android:gravity="center"
+                        android:visibility="gone"/>
+                    <EditText
+                        android:id="@+id/passwordInputRegister"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/password"
+                        android:inputType="textPassword"
+                        android:backgroundTint="#FFFFFF"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#99FFFFFF"
+                        android:layout_marginBottom="16dp"
+                        android:autofillHints="" />
+
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/avatarAddButton"
+                        android:onClick="avatarAddButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:textAllCaps="false"
+                        android:text="@string/add_avatar"
+                        android:textColor="@color/white"
+                        android:background="@drawable/rounded_button_solid"/>
+
+                    <TextView
+                        android:id="@+id/errorMessageAvatar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/error"
+                        android:gravity="center"
+                        android:visibility="gone"/>
+                    <ImageView
+                        android:id="@+id/avatarPreviewImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+
+
+                    <!-- Кнопка входа -->
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/loginButtonRegister"
+                        android:onClick="onRegisterClicked"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAllCaps="false"
+                        android:text="@string/sign_up"
+                        android:background="@drawable/rounded_button_solid"
+                        android:textColor="@color/white"
+                        android:layout_marginBottom="16dp"
+                        android:textStyle="bold"/>
+
+                    <!-- Текст для входа -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="50dp"
+                        android:gravity="center">
+
+                        <!-- Ссылка на вход -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/have_an_account"
+                            android:textColor="@color/login_text_color_light"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            android:layout_gravity="center_horizontal" />
+
+                        <TextView
+                            android:onClick="onBackToLoginClicked"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/log_in"
+                            android:textColor="@color/login_text_color_cyan"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:paddingStart="10dp"
+                            android:gravity="center"
+                            android:layout_gravity="center_horizontal"
+                            tools:ignore="RtlSymmetry" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

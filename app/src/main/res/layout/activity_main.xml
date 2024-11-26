@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="#000000">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingVertical="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="5dp">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="50dp"
+                android:src="@drawable/cinemate"
+                android:scaleType="centerInside"
+                android:layout_gravity="center"
+                tools:ignore="ContentDescription" />
+
+            <Button
+                android:onClick="getStatedButton"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="0.6"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="25dp"
+                android:padding="0dp"
+                android:layout_gravity="center"
+                app:cornerRadius="5dp"
+                android:backgroundTint="#24C0C9"
+                android:text="@string/sign_up"
+                android:textSize="10sp"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                tools:ignore="SmallSp" />
+
+        </LinearLayout>
+
+        <!-- Header Section with Background Image -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp">
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/logo_placeholder"
+                android:scaleType="centerCrop"
+                android:alpha="0.3"
+                tools:ignore="ContentDescription" />
+
+            <!-- Foreground Content -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/unlimited_movies_tv_shows_and_more"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/watch_anywhere_and_anytime"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:gravity="center" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:onClick="getStatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/get_started"
+                    android:background="@drawable/rounded_button_skyblue"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:paddingHorizontal="25dp"
+                    android:layout_marginTop="16dp"/>
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Section: Enjoy on your TV -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:paddingHorizontal="30dp"
+            android:layout_marginBottom="24dp">
+
+            <!-- Background Image -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/tv_placeholder"
+                android:scaleType="centerInside"
+                tools:ignore="ContentDescription"
+                android:layout_margin="10dp"/>
+
+            <!-- Text Content -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                tools:ignore="MissingConstraints">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:text="@string/enjoy_on_your_tv"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:text="@string/watch_on_smart_tvs_playstation_xbox_chromecast_apple_tv_blu_ray_players_and_more"
+                        android:textColor="#AAAAAA"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:layout_marginTop="8dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Section: Watch everywhere -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:paddingHorizontal="30dp"
+            android:layout_marginBottom="24dp">
+
+            <!-- Background Image -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/devices_placeholder"
+                android:scaleType="centerInside"
+                tools:ignore="ContentDescription"
+                android:layout_margin="10dp"/>
+
+            <!-- Foreground Content -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                tools:ignore="MissingConstraints">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:weightSum="1"
+                    tools:ignore="RtlHardcoded">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:text="@string/watch_everywhere"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:weightSum="1"
+                    tools:ignore="RtlHardcoded">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:text="@string/stream_unlimited_movies_and_tv_shows_on_your_phone_tablet_laptop_and_tv"
+                        android:textColor="#AAAAAA"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:layout_marginTop="8dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Section: Create profiles for kids -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:paddingHorizontal="30dp"
+            android:layout_marginBottom="24dp">
+
+            <!-- Background Image -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/kids_placeholder"
+                android:scaleType="centerInside"
+                tools:ignore="ContentDescription"/>
+
+            <!-- Text Content -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                tools:ignore="MissingConstraints">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:text="@string/create_profiles_for_kids"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:text="@string/send_kids_on_adventures_with_their_favorite_characters_in_a_space_made_just_for_them_free"
+                        android:textColor="#AAAAAA"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:layout_marginTop="8dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Section: Download shows -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:paddingHorizontal="30dp"
+            android:layout_marginBottom="24dp">
+
+            <!-- Background Image -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/download_placeholder"
+                android:scaleType="centerInside"
+                tools:ignore="ContentDescription"
+                android:layout_margin="10dp"/>
+
+            <!-- Foreground Content -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                tools:ignore="MissingConstraints">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:weightSum="1"
+                    tools:ignore="RtlHardcoded">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:text="@string/download_your_shows_to_watch_offline"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:weightSum="1"
+                    tools:ignore="RtlHardcoded">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:text="@string/watch_on_a_plane_train_or_submarine"
+                        android:textColor="#AAAAAA"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:layout_marginTop="8dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Footer -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp">
+
+            <!-- Foreground Content -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                tools:ignore="UselessParent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/let_s_find_your_preferences"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_marginBottom="8dp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:onClick="getStatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/get_started"
+                    android:background="@drawable/rounded_button_skyblue"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:paddingHorizontal="25dp"
+                    android:layout_marginTop="16dp"/>
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+</ScrollView>
