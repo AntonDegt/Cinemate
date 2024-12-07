@@ -17,6 +17,24 @@ public class Category {
     // Для категорий - null         Для подкатегорий - ссылка
     public List<Movie> movies = null;
 
+    public Category() {}
+
+    public Category(String jsonString) throws JSONException {
+        {
+            List<Category> categories = new ArrayList<>();
+
+            // Преобразуем строку в объект JSONObject
+            JSONObject jsonResponse = new JSONObject(jsonString);
+            // Получаем массив категорий из JSON
+            JSONObject categoryJson = jsonResponse.getJSONObject("data");
+
+            // Заполняем поля объекта Category
+            this.id = UUID.fromString(categoryJson.getString("id"));
+            this.name = categoryJson.getString("name");
+            this.description = categoryJson.getString("description");
+            this.pictureURL = categoryJson.getString("picture");
+        }
+    }
 
     public static List<Category> getFromJSON(String jsonString) throws JSONException {
         {

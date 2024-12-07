@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".MovieActivity">
+
+    <!-- Main Content -->
+    <ScrollView
+        android:id="@+id/movie_mainContentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="110dp"
+                android:layout_height="30dp"
+                android:src="@drawable/cinemate"
+                android:scaleType="centerInside"
+                android:layout_margin="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                    <com.step.cinemate.View.TransparentTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/movieCategoryTextView"
+                        android:textColor="#000000"
+                        android:background="@drawable/rounded_image"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:paddingVertical="5dp"
+                        android:paddingHorizontal="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:gravity="center"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/movieNameTextView"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:id="@+id/movieMainImageView"
+                    android:scaleType="centerCrop"
+                    android:elevation="-1dp"
+                    android:alpha="0.3"
+                    tools:ignore="ContentDescription"/>
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="16dp">
+
+            <!-- Просмотр плеера -->
+            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                android:id="@+id/youtube_player_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                tools:ignore="MissingConstraints" />
+
+            <!-- Лайки Избранное -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:id="@+id/movie_favoriteImageView"
+                    android:onClick="favoriteImageClick"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/ic_plus"/>
+
+                <ImageView
+                    android:id="@+id/movie_likeImageView"
+                    android:onClick="likeImageViewClick"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_thumbs_up"/>
+
+                <TextView
+                    android:id="@+id/movie_likeCountTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:gravity="center"
+                    android:text="255443"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <!-- Год выпуска -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/release_year"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingEnd="20dp"
+                    tools:ignore="RtlSymmetry" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/movieReleaseYearTextView"
+                    android:textColor="#BBBBBB"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <!-- Длительность -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/duration"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingEnd="20dp"
+                    tools:ignore="RtlSymmetry" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/movieDurationTextView"
+                    android:textColor="#BBBBBB"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <!-- Описание -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/movieDescriptionTextView"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:gravity="start"
+                android:layout_marginBottom="10dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/movie_loadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="110dp"
+            android:layout_height="30dp"
+            android:src="@drawable/cinemate"
+            android:scaleType="centerInside"
+            android:layout_margin="10dp"/>
+        <ImageView
+            android:id="@+id/movie_loadingGif"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"
+            android:src="@drawable/loading"
+            android:visibility="visible"/>
+
+    </FrameLayout>
+
+</FrameLayout>

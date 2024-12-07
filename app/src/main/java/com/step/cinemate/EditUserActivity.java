@@ -1,81 +1,47 @@
 package com.step.cinemate;
 
-import com.step.cinemate.Services.BackendService;
-import com.step.cinemate.Services.LoginService;
-
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import android.provider.MediaStore;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import com.step.cinemate.Data.Movie;
+import com.step.cinemate.Services.BackendService;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import android.Manifest;
+public class EditUserActivity extends AppCompatActivity {
 
-
-
-public class LoginActivity extends AppCompatActivity {
-
-    private enum LoginActivityState {CHOOSE, LOGIN, REGISTRATION}
-
-    // Layouts
-    private LinearLayout chooseMethodLayout, loginLayout, registrationLayout;
-
-    // Log In
-    private EditText emailEditText, passwordEditText;
-    private TextView errorMessageView;
-
-    // Sign Up
     private EditText userNameEditText, firstNameEditText, surnameEditText, registerEmailEditText, phoneNumberEditText, registerPasswordEditText;
     private TextView errorMessageLogin, errorMessageFirstName, errorMessageSurname, errorMessageEmail, errorMessagePhoneNumber, errorMessagePassword, errorMessageAvatar;
     private ImageView avatarSelectedImage;
-    private static final int PICK_IMAGE = 100;
-    private String selectedAvatarImagePath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_edit_user);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        // Инициализация Layout-ов
-        chooseMethodLayout = findViewById(R.id.chooseMethodLayout);
-        loginLayout = findViewById(R.id.loginLayout);
-        registrationLayout = findViewById(R.id.registrationLayout);
-
-        switchState (LoginActivityState.CHOOSE);
-
-        // Log In
-        emailEditText = findViewById(R.id.emailInput);
-        passwordEditText = findViewById(R.id.passwordInput);
-        errorMessageView = findViewById(R.id.errorMessage);
 
         // Registration
         userNameEditText = findViewById(R.id.loginInputRegister);
@@ -84,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         registerEmailEditText = findViewById(R.id.emailInputRegister);
         phoneNumberEditText = findViewById(R.id.phoneInputRegister);
         registerPasswordEditText = findViewById(R.id.passwordInputRegister);
+        loadFields();
 
         errorMessageLogin = findViewById(R.id.errorMessageLogin);
         errorMessageFirstName = findViewById(R.id.errorMessageFirstName);
@@ -92,111 +59,34 @@ public class LoginActivity extends AppCompatActivity {
         errorMessagePhoneNumber = findViewById(R.id.errorMessagePhoneNumber);
         errorMessagePassword = findViewById(R.id.errorMessagePassword);
         errorMessageAvatar = findViewById(R.id.errorMessageAvatar);
-
-        avatarSelectedImage = findViewById(R.id.avatarPreviewImage);
-        avatarSelectedImage.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-
-
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null) {
-            Uri imageUri = data.getData();
-
-            // Отображаем изображение в ImageView
-            avatarSelectedImage.setImageURI(imageUri);
-        }
-    }
-
-    private void switchState (LoginActivityState state) {
-        switch (state) {
-            case CHOOSE:
-                chooseMethodLayout.setVisibility(View.VISIBLE);
-                loginLayout.setVisibility(View.GONE);
-                registrationLayout.setVisibility(View.GONE);
-                break;
-
-            case LOGIN:
-                chooseMethodLayout.setVisibility(View.GONE);
-                loginLayout.setVisibility(View.VISIBLE);
-                registrationLayout.setVisibility(View.GONE);
-                break;
-
-            case REGISTRATION:
-                chooseMethodLayout.setVisibility(View.GONE);
-                loginLayout.setVisibility(View.GONE);
-                registrationLayout.setVisibility(View.VISIBLE);
-                break;
-        }
-    }
-
-    // Обработчик нажатия на ссылку "Sign up"
-    public void onRegisterLinkClicked(View view) {
-        switchState(LoginActivityState.CHOOSE);
-    }
-    // Обработчик нажатия на ссылку "Back to login"
-    public void onBackToLoginClicked(View view) {
-        switchState(LoginActivityState.LOGIN);
-    }
-
-
-
-
-
-    // Обработчик нажатия на "Continue with Google"
-    public void onGoogleSignInClicked(View view) {
-    }
-    // Обработчик нажатия на "Continue with Facebook"
-    public void onFacebookSignInClicked(View view) {
-    }
-    // Обработчик нажатия на "Continue with Email"
-    public void onEmailSignInClicked(View view) {
-        switchState(LoginActivityState.REGISTRATION);
-    }
-
-
-    // Лаунчер для обработки результата выбора изображения
-    public void avatarAddButton(View view) {
-        // Запускаем Intent для выбора изображения
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PICK_IMAGE);
-    }
-
-
-
-
-    // Обработчик нажатия на "Log in"
-    public void onLoginClicked(View view) {
-        String email, password;
-
-        email = emailEditText.getText().toString();
-        password = passwordEditText.getText().toString();
-
-        // Request
-        Map<String, String> params = new HashMap<>();
-        params.put("email", email);
-        params.put("password", password);
-
-        Map<String, File> file_params = new HashMap<>();
-
-        BackendService.sendPostRequest(
-                getResources().getString(R.string.auth),
-                params,
-                file_params,
+    private void loadFields(){
+        BackendService.sendGetRequest(
+                getResources().getString(R.string.signupuser),
+                new HashMap<>(),
                 response -> {
                     // Обрабатываем результат в коллбэке
                     System.out.println("Response Code: " + response.getResponseCode());
                     System.out.println("Response Body: " + response.getResponseBody());
 
-                    LogIn(response);
-                },
-                "multipart/form-data");
+                    if (response.getResponseCode() == 200){
+                        List<Movie> movies = new ArrayList<>();
+
+                        JSONObject jsonResponse = new JSONObject(response.getResponseBody());
+                        JSONObject dataObj = jsonResponse.getJSONObject("user");
+
+                        userNameEditText.setText(dataObj.getString("name"));
+                        firstNameEditText.setText(dataObj.getString("firstName"));
+                        surnameEditText.setText(dataObj.getString("surname"));
+                        registerEmailEditText.setText(dataObj.getString("email"));
+                        phoneNumberEditText.setText(dataObj.getString("phoneNumber"));
+                        }
+                });
+
     }
 
-    // Обработчик нажатия на "Sign up"
-    public void onRegisterClicked(View view) {
+    public void onEditClicked(View view) {
         String userName, firstName, surname, email, phoneNumber, password;
 
         userName = userNameEditText.getText().toString();
@@ -204,64 +94,29 @@ public class LoginActivity extends AppCompatActivity {
         surname = surnameEditText.getText().toString();
         email = registerEmailEditText.getText().toString();
         phoneNumber = phoneNumberEditText.getText().toString();
-        password = registerPasswordEditText.getText().toString();
 
 
         // Request
-        Map<String, String> params = new HashMap<>();
-        params.put("userName", userName);
-        params.put("firstName", firstName);
-        params.put("surname", surname);
-        params.put("email", email);
-        params.put("phoneNumber", phoneNumber);
-        params.put("password", password);
-
-        Map<String, File> file_params = new HashMap<>();
-
-        File avatar = new File(selectedAvatarImagePath);
-        if (avatar.exists())
-            file_params.put("avatar", avatar);
+        Map<String, String> par = new HashMap<>();
+        par.put("userName", userName);
+        par.put("firstName", firstName);
+        par.put("surname", surname);
+        par.put("email", email);
+        par.put("phoneNumber", phoneNumber);
 
 
-        BackendService.sendPostRequest(
+        BackendService.sendPatchRequest(
                 getResources().getString(R.string.signupuser),
-                params,
-                file_params,
+                par,
+                new HashMap<>(),
                 response -> {
                     // Обрабатываем результат в коллбэке
                     System.out.println("Response Code: " + response.getResponseCode());
                     System.out.println("Response Body: " + response.getResponseBody());
 
                     SignUp(response);
-                },
-                "multipart/form-data");
+                });
     }
-
-    public void LogIn (BackendService.Response response) throws JSONException {
-        int code = response.getResponseCode();
-        switch (code) {
-            case -1:
-            case 400:
-            case 401:
-                runOnUiThread(() -> errorMessageView.setVisibility(View.VISIBLE));
-                break;
-
-            case 200:
-                runOnUiThread(() -> errorMessageView.setVisibility(View.GONE));
-
-                JSONObject json = new JSONObject(response.getResponseBody());
-                LoginService.token = json.getString("token");
-
-                LoginService.saveLoginData(
-                        this,
-                        emailEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-
-                finish();
-                break;
-        }
-    }
-
     public void SignUp (BackendService.Response response) throws JSONException {
         int code = response.getResponseCode();
         switch (code) {
@@ -326,9 +181,12 @@ public class LoginActivity extends AppCompatActivity {
                 break;
 
             case 200:
-                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "User registered successfully!", Toast.LENGTH_LONG).show());
-                runOnUiThread(() -> switchState(LoginActivityState.LOGIN));
+                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "User edit successfully!", Toast.LENGTH_LONG).show());
                 break;
         }
+    }
+
+    public void onCancelClicked(View view) {
+        finish();
     }
 }

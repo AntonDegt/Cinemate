@@ -1,4 +1,5 @@
 package com.step.cinemate.Adapters;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +14,18 @@ import com.step.cinemate.Data.Movie;
 import com.step.cinemate.R;
 
 import java.util.List;
+import java.util.UUID;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
 
     private final Context context;
     private final List<Movie> movies;
+    private final OnMovieClickListener listener; // Интерфейс для обработки кликов
 
-    public MoviesAdapter(Context context, List<Movie> movies) {
+    public MoviesAdapter(Context context, List<Movie> movies, OnMovieClickListener listener) {
         this.context = context;
         this.movies = movies;
+        this.listener = listener;
     }
 
     @NonNull
@@ -40,6 +44,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
                 .load(movie.pictureURL)
                 .placeholder(R.drawable.image_not_found) // Замените на ваш файл-заглушку
                 .into(holder.movieImage);
+
+        // Обработка нажатия на изображение
+        holder.movieImage.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onMovieClick(movie.id); // Передаем ID фильма
+            }
+        });
     }
 
     @Override
@@ -54,5 +65,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             super(itemView);
             movieImage = itemView.findViewById(R.id.movieImage);
         }
+    }
+
+    // Интерфейс для передачи кликов
+    public interface OnMovieClickListener {
+        void onMovieClick(UUID movieId);
     }
 }

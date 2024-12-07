@@ -31,10 +31,23 @@
     <string name="create_profiles_for_kids">Create profiles for kids</string>
     <string name="send_kids_on_adventures_with_their_favorite_characters_in_a_space_made_just_for_them_free">Send kids on adventures with their favorite characters in a space made just for them—free.</string>
     <string name="download_your_shows_to_watch_offline">Download your shows to watch offline</string>
-    <string name="watch_on_a_plane_train_or_submarine">Watch on a plane, train, or submarine...</string>
+    <string name="watch_on_a_plane_train_or_submarine">Watch on a plane, train, or submarine…</string>
     <string name="let_s_find_your_preferences">Let\'s find your preferences!</string>
     <string name="continue_watching">Continue watching</string>
     <string name="new_top_content_here">New top content here</string>
     <string name="recommendations_for_you">Recommendations for you</string>
     <string name="category_is_currently_empty">Category is currently empty</string>
+    <string name="search">Search…</string>
+    <string name="news">News</string>
+    <string name="notifications">Notifications</string>
+    <string name="watch_history">Watch history</string>
+    <string name="manage_account">Manage account</string>
+    <string name="add_new_account">Add new account</string>
+    <string name="sign_out">Sign out</string>
+    <string name="release_year">Release Year:</string>
+    <string name="duration">Duration:</string>
+    <string name="category">Category:</string>
+    <string name="your_special_notifications">Your Special Notifications</string>
+    <string name="edit_your_details">Edit your details</string>
+    <string name="edit">Edit</string>
 </resources>

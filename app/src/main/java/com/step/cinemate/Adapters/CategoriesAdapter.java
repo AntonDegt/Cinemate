@@ -18,10 +18,12 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
 
     private final Context context;
     private final List<Category> categories;
+    private final MoviesAdapter.OnMovieClickListener listener;
 
-    public CategoriesAdapter(Context context, List<Category> categories) {
+    public CategoriesAdapter(Context context, List<Category> categories, MoviesAdapter.OnMovieClickListener listener) {
         this.context = context;
         this.categories = categories;
+        this.listener = listener;
     }
 
     @NonNull
@@ -37,7 +39,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
         holder.categoryTitle.setText(category.name);
 
         // Настраиваем адаптер для списка фильмов внутри категории
-        MoviesAdapter movieAdapter = new MoviesAdapter(context, category.movies);
+        MoviesAdapter movieAdapter = new MoviesAdapter(context, category.movies, listener);
         holder.moviesRecyclerView.setAdapter(movieAdapter);
     }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/main"
+    android:id="@+id/mainLibrary"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,28 +8,24 @@
     android:layout_height="wrap_content"
     android:background="#000">
 
-    <!--TopBar -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:gravity="right"
-        android:layout_margin="10dp"
-        android:backgroundTint="#ffffff"
-        tools:ignore="RtlHardcoded">
+    <!-- User Menu-->
+    <include
+        layout="@layout/user_menu"/>
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="match_parent" />
+    <!-- Top Bar -->
+    <include
+        layout="@layout/top_bar"/>
 
-    </LinearLayout>
 
+
+    <!--Scrollbar -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/avatarImageView"
+        android:id="@+id/scrollViewLibrary"
         android:background="#222"
         android:fillViewport="true"
+        android:scrollbars="none"
         tools:context=".LibraryActivity">
 
         <LinearLayout
@@ -91,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:orientation="vertical"
-                android:padding="8dp"
+                android:padding="15dp"
                 android:background="#000000"
                 android:visibility="visible">
 
@@ -109,16 +105,36 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:orientation="horizontal" />
+                    android:orientation="horizontal"/>
 
             </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.step.cinemate.View.CustomRecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/categoriesRecyclerView"
                 android:nestedScrollingEnabled="false"/>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="3dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/categoriesButtonRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:background="#000"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:visibility="gone"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
     </ScrollView>
+
 </RelativeLayout>

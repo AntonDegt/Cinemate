@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_notificationLinearLayout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FF0000"
+    android:layout_margin="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:padding="12dp"
+        android:background="#333333">
+
+        <TextView
+            android:id="@+id/notificationText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/notificationTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#BBBBBB"
+            android:textSize="12sp"/>
+
+        <Button
+            android:id="@+id/markAsReadButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mark as Read"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#FF0000"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+</LinearLayout>

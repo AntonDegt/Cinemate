@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:id="@+id/accountBar"
+    android:padding="5dp"
+    android:paddingStart="15dp"
+    android:background="@drawable/rounded_text"
+    android:backgroundTint="#141414"
+    app:cornerRadius="5dp"
+    android:elevation="2dp"
+    android:orientation="vertical"
+    android:layout_marginTop="47dp"
+    android:layout_marginEnd="5dp"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentEnd="true"
+    android:visibility="gone"
+    tools:ignore="RtlSymmetry">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_height="match_parent"
+            android:id="@+id/avatarImageView"
+            android:layout_marginEnd="10dp"
+            android:scaleType="centerInside"
+            android:gravity="start"
+            tools:ignore="ContentDescription" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".50"
+                android:id="@+id/userFullNameTextView"
+                android:paddingLeft="10dp"
+                android:gravity="center_vertical"
+                android:textColor="#FFFFFF"
+                android:text=""/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".50"
+                android:id="@+id/userLoginTextView"
+                android:paddingLeft="10dp"
+                android:gravity="center_vertical"
+                android:textColor="#A0A0A0"
+                android:text=""/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="notificationButtonClick">
+        <!-- Иконка -->
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_bell"
+            android:layout_marginEnd="8dp"
+            tools:ignore="ContentDescription" />
+
+        <!-- Текст -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="@string/notifications"
+            android:textColor="#A0A0A0"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="manageButtonClick">
+        <!-- Иконка -->
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_user_gear"
+            android:layout_marginEnd="8dp"
+            tools:ignore="ContentDescription" />
+
+        <!-- Текст -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/manage_account"
+            android:textColor="#A0A0A0"/>
+    </LinearLayout>
+
+    <!-- Выход -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="exitButtonClick">
+        <!-- Иконка -->
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_arrow_right_from_bracket"
+            android:layout_marginEnd="8dp"
+            tools:ignore="ContentDescription" />
+
+        <!-- Текст -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="@string/sign_out"
+            android:textColor="#A0A0A0"/>
+    </LinearLayout>
+
+</LinearLayout>

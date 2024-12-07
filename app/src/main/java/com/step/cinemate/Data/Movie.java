@@ -23,15 +23,44 @@ public class Movie {
     public UUID subCategoryId;
 
 
+    public Movie() {}
 
-    public static List<Movie> getFromJSON(String jsonString) throws JSONException {
+    public Movie(String jsonString) throws JSONException {
+        {
+            // Преобразуем строку в объект JSONObject
+            JSONObject jsonResponse = new JSONObject(jsonString);
+            // Получаем массив категорий из JSON
+            JSONArray dataArray = jsonResponse.getJSONArray("data");
+
+            JSONObject movieJson = dataArray.getJSONObject(0);
+
+            // Заполняем поля объекта Category
+            this.id = UUID.fromString(movieJson.getString("id"));
+            this.title = movieJson.getString("title");
+            this.description = movieJson.getString("description");
+            this.pictureURL = movieJson.getString("picture");
+            this.url = movieJson.getString("url");
+            this.releaseYear = movieJson.getInt("releaseYear");
+            if (this.duration == "null") this.duration = "";
+            this.likeCount = movieJson.getInt("likeCount");
+            if (!movieJson.isNull("dislikeCount"))
+                this.dislikeCount = movieJson.getInt("dislikeCount");
+            else
+                this.dislikeCount = 0;
+            this.categoryId = UUID.fromString(movieJson.getString("categoryId"));
+            this.subCategoryId = UUID.fromString(movieJson.getString("subCategoryId"));
+        }
+    }
+
+
+    public static List<Movie> getFromJSON(String jsonString, String arrayName) throws JSONException {
         {
             List<Movie> movies = new ArrayList<>();
 
             // Преобразуем строку в объект JSONObject
             JSONObject jsonResponse = new JSONObject(jsonString);
             // Получаем массив категорий из JSON
-            JSONArray dataArray = jsonResponse.getJSONArray("data");
+            JSONArray dataArray = jsonResponse.getJSONArray(arrayName);
 
             // Перебираем каждый элемент в массиве
             for (int i = 0; i < dataArray.length(); i++) {
@@ -48,8 +77,12 @@ public class Movie {
                 movie.url = movieJson.getString("url");
                 movie.releaseYear = movieJson.getInt("releaseYear");
                 movie.duration = movieJson.getString("duration");
+                if (movie.duration == "null") movie.duration = "";
                 movie.likeCount = movieJson.getInt("likeCount");
-                movie.dislikeCount = movieJson.getInt("dislikeCount");
+                if (!movieJson.isNull("dislikeCount"))
+                    movie.dislikeCount = movieJson.getInt("dislikeCount");
+                else
+                    movie.dislikeCount = 0;
                 movie.categoryId = UUID.fromString(movieJson.getString("categoryId"));
                 movie.subCategoryId = UUID.fromString(movieJson.getString("subCategoryId"));
 

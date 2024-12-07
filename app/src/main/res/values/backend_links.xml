@@ -10,4 +10,23 @@
                                                                             <!-- subcategoryId={subcategoryId} -->
     <string name="movie">           https://backend.cinemate.pp.ua/api/movies/      </string>
                                                                             <!-- {movieId} -->
+    <string name="avatars">         https://backend.cinemate.pp.ua/avatars/         </string>
+                                                                            <!--{avatarId}-->
+
+    <string name="save_timecode">       https://backend.cinemate.pp.ua/api/pause/save       </string>
+    <string name="get_list_timecode">   https://backend.cinemate.pp.ua/api/pause            </string>
+    <string name="get_timecode">        https://backend.cinemate.pp.ua/api/pause/           </string>
+                                                                            <!--{movieId}-->
+
+    <string name="like_get_status">     https://backend.cinemate.pp.ua/api/likes/get-status  </string>
+    <string name="like_set_status">     https://backend.cinemate.pp.ua/api/likes/toggle-like </string>
+
+    <string name="get_favorite">     https://backend.cinemate.pp.ua/api/FavoriteMovies       </string>
+    <string name="add_favorite">     https://backend.cinemate.pp.ua/api/FavoriteMovies       </string>
+    <string name="delete_favorite">  https://backend.cinemate.pp.ua/api/FavoriteMovies       </string>
+
+    <string name="get_notifications">https://backend.cinemate.pp.ua/api/Notification         </string>
+    <string name="set_mark_notifications">https://backend.cinemate.pp.ua/api/Notification/mark         </string>
+
+    <string name="get_priority_list">https://backend.cinemate.pp.ua/api/prioritycategories         </string>
 </resources>

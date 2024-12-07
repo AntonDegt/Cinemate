@@ -1,23 +1,21 @@
 package com.step.cinemate.Services;
 
-import org.json.JSONException;
+import android.os.Handler;
+import android.os.Looper;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 public class BackendService {
-
-    public static String token;
     // Класс для возврата кода и тела ответа
     public static class Response {
         private final int responseCode;
@@ -43,42 +41,90 @@ public class BackendService {
         void onResponse(Response response) throws JSONException;
     }
 
+    // Очередь для запросов
+    private static final Queue<Runnable> requestQueue = new LinkedList<>();
+    private static boolean isProcessing = false;
 
-    // Универсальный метод для отправки POST запроса с callback
-    // Метод для отправки POST запроса с несколькими файлами
-    public static void sendPostRequest(String urlString, Map<String, String> params, Map<String, File> files, ResponseCallback callback) {
+    // Метод для выполнения следующего запроса
+    private static synchronized void processNext() {
+        Runnable nextRequest = requestQueue.poll();
+        if (nextRequest != null) {
+            isProcessing = true;
+            new Thread(() -> {
+                try {
+                    nextRequest.run();
+                } finally {
+                    synchronized (BackendService.class) {
+                        isProcessing = false;
+                        processNext();
+                    }
+                }
+            }).start();
+        }
+    }
+    public static void sendPostRequest(String urlString, Map<String, String> params, Map<String, File> files, ResponseCallback callback, String contentType) {
+        sendPostRequest(urlString, params, files, new HashMap<>(), callback, contentType);
+    }
+    public static void sendPostRequest(String urlString, Map<String, String> params, Map<String, File> files, Map<String, Boolean> paramsBoolean, ResponseCallback callback, String contentType) {
         new Thread(() -> {
             HttpURLConnection connection = null;
             String boundary = "----WebKitFormBoundary" + System.currentTimeMillis();
             try {
-                // Устанавливаем URL
                 URL url = new URL(urlString);
                 connection = (HttpURLConnection) url.openConnection();
-
-                // Настройка соединения
                 connection.setRequestMethod("POST");
-                connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-                connection.setDoOutput(true);
 
-                // Открываем поток для записи данных
-                OutputStream outputStream = connection.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
-
-                // Добавляем текстовые параметры
-                for (Map.Entry<String, String> param : params.entrySet()) {
-                    writer.write("--" + boundary + "\r\n");
-                    writer.write("Content-Disposition: form-data; name=\"" + param.getKey() + "\"\r\n\r\n");
-                    writer.write(param.getValue() + "\r\n");
+                // Устанавливаем Content-Type
+                if ("application/json".equals(contentType)) {
+                    connection.setRequestProperty("Content-Type", "application/json");
+                } else if ("multipart/form-data".equals(contentType)) {
+                    connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
                 }
 
+                if (LoginService.token != null) {
+                    connection.setRequestProperty("Authorization", "Bearer " + LoginService.token);
+                }
 
+                connection.setDoOutput(true);
 
-                // Завершаем запрос
-                writer.write("--" + boundary + "--\r\n");
-                writer.flush();
-                writer.close();
+                OutputStream outputStream = connection.getOutputStream();
 
-                // Чтение ответа от сервера
+                if ("application/json".equals(contentType)) {
+                    // JSON тело
+                    JSONObject json = new JSONObject(params);
+                    outputStream.write(json.toString().getBytes(StandardCharsets.UTF_8));
+                } else if ("multipart/form-data".equals(contentType)) {
+                    // Multipart тело
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+                    for (Map.Entry<String, String> param : params.entrySet()) {
+                        writer.write("--" + boundary + "\r\n");
+                        writer.write("Content-Disposition: form-data; name=\"" + param.getKey() + "\"\r\n\r\n");
+                        writer.write(param.getValue() + "\r\n");
+                    }
+
+                    for (Map.Entry<String, File> fileEntry : files.entrySet()) {
+                        writer.write("--" + boundary + "\r\n");
+                        writer.write("Content-Disposition: form-data; name=\"" + fileEntry.getKey() + "\"; filename=\"" + fileEntry.getValue().getName() + "\"\r\n");
+                        writer.write("Content-Type: application/octet-stream\r\n\r\n");
+                        writer.flush();
+
+                        FileInputStream fileInputStream = new FileInputStream(fileEntry.getValue());
+                        byte[] buffer = new byte[4096];
+                        int bytesRead;
+                        while ((bytesRead = fileInputStream.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, bytesRead);
+                        }
+                        fileInputStream.close();
+                        writer.write("\r\n");
+                    }
+                    writer.write("--" + boundary + "--\r\n");
+                    writer.flush();
+                    writer.close();
+                }
+
+                outputStream.flush();
+                outputStream.close();
+
                 int responseCode = connection.getResponseCode();
                 StringBuilder responseBody = new StringBuilder();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -89,16 +135,22 @@ public class BackendService {
                 }
                 reader.close();
 
-                // Вызов callback с результатом
-                callback.onResponse(new Response(responseCode, responseBody.toString()));
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    try {
+                        callback.onResponse(new Response(responseCode, responseBody.toString()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
 
             } catch (Exception e) {
-                // Обработка ошибок
-                try {
-                    callback.onResponse(new Response(-1, e.getMessage()));
-                } catch (JSONException ex) {
-                    throw new RuntimeException(ex);
-                }
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    try {
+                        callback.onResponse(new Response(-1, e.getMessage()));
+                    } catch (JSONException ex) {
+                        ex.printStackTrace();
+                    }
+                });
             } finally {
                 if (connection != null) {
                     connection.disconnect();
@@ -110,6 +162,9 @@ public class BackendService {
 
 
 
+
+
+    // Универсальный метод для отправки GET запроса с callback
     public static void sendGetRequest(String urlString, Map<String, String> params, ResponseCallback callback) {
         new Thread(() -> {
             HttpURLConnection connection = null;
@@ -124,8 +179,7 @@ public class BackendService {
                                 .append(param.getValue())
                                 .append("&");
                     }
-                    // Убираем последний "&"
-                    urlWithParams.setLength(urlWithParams.length() - 1);
+                    urlWithParams.setLength(urlWithParams.length() - 1); // Убираем последний "&"
                 }
 
                 // Открываем соединение
@@ -134,47 +188,190 @@ public class BackendService {
 
                 // Настройка соединения
                 connection.setRequestMethod("GET");
+
+                // Если токен доступен, добавляем его в заголовок
+                if (LoginService.token != null) {
+                    connection.setRequestProperty("Authorization", "Bearer " + LoginService.token);
+                }
+
                 connection.setRequestProperty("Accept", "application/json");
 
-                // Получаем код ответа
+                // Чтение ответа
                 int responseCode = connection.getResponseCode();
-
-                // Чтение ответа от сервера
-                BufferedReader reader = null;
-                try {
-                    InputStream inputStream = (responseCode == HttpURLConnection.HTTP_OK)
-                            ? connection.getInputStream()
-                            : connection.getErrorStream();
-
-                    // Считываем поток с помощью BufferedReader
-                    reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-                    StringBuilder responseBody = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        responseBody.append(line);
-                    }
-
-                    // Передаем данные через callback
-                    callback.onResponse(new Response(responseCode, responseBody.toString()));
-                } catch (Exception e) {
-                    callback.onResponse(new Response(-1, e.getMessage()));
-                } finally {
-                    if (reader != null) {
-                        try {
-                            reader.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                InputStream inputStream = (responseCode == HttpURLConnection.HTTP_OK)
+                        ? connection.getInputStream()
+                        : connection.getErrorStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+                StringBuilder responseBody = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    responseBody.append(line.trim());
                 }
+                reader.close();
+
+                // Передача результата в UI-поток
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    try {
+                        callback.onResponse(new Response(responseCode, responseBody.toString()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
 
             } catch (Exception e) {
-                // Обработка ошибок
-                try {
-                    callback.onResponse(new Response(-1, e.getMessage()));
-                } catch (JSONException ex) {
-                    throw new RuntimeException(ex);
+                // Обработка ошибки в UI-потоке
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    try {
+                        callback.onResponse(new Response(-1, e.getMessage()));
+                    } catch (JSONException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
                 }
+            }
+        }).start();
+    }
+
+    public static void sendDeleteRequest(String urlString, Map<String, String> params, ResponseCallback callback) {
+        new Thread(() -> {
+            HttpURLConnection connection = null;
+            try {
+                URL url = new URL(urlString);
+                connection = (HttpURLConnection) url.openConnection();
+
+                // Настройка соединения
+                connection.setRequestMethod("DELETE");
+                connection.setRequestProperty("Content-Type", "application/json");
+
+                // Если токен доступен, добавляем его в заголовок
+                if (LoginService.token != null) {
+                    connection.setRequestProperty("Authorization", "Bearer " + LoginService.token);
+                }
+
+                connection.setDoOutput(true);
+
+                // Параметры передаём в теле запроса в формате JSON
+                if (params != null && !params.isEmpty()) {
+                    JSONObject jsonBody = new JSONObject(params);
+                    OutputStream outputStream = connection.getOutputStream();
+                    outputStream.write(jsonBody.toString().getBytes(StandardCharsets.UTF_8));
+                    outputStream.flush();
+                    outputStream.close();
+                }
+
+                // Чтение ответа от сервера
+                int responseCode = connection.getResponseCode();
+                InputStream inputStream = (responseCode == HttpURLConnection.HTTP_OK)
+                        ? connection.getInputStream()
+                        : connection.getErrorStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+                StringBuilder responseBody = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    responseBody.append(line.trim());
+                }
+                reader.close();
+
+                // Передача результата в UI-поток
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    try {
+                        callback.onResponse(new Response(responseCode, responseBody.toString()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+            } catch (Exception e) {
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    try {
+                        callback.onResponse(new Response(-1, e.getMessage()));
+                    } catch (JSONException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+        }).start();
+    }
+
+    public static void sendPatchRequest(String urlString, Map<String, String> params, Map<String, Boolean> paramsB, ResponseCallback callback) {
+        new Thread(() -> {
+            HttpURLConnection connection = null;
+            try {
+                URL url = new URL(urlString);
+                connection = (HttpURLConnection) url.openConnection();
+
+                // Настройка соединения
+                connection.setRequestMethod("PATCH");
+                connection.setRequestProperty("Content-Type", "application/json");
+
+                if (LoginService.token != null) {
+                    connection.setRequestProperty("Authorization", "Bearer " + LoginService.token);
+                }
+
+                connection.setDoOutput(true);
+
+                // Формирование JSON
+                JSONObject jsonBody = new JSONObject();
+                if (params != null) {
+                    for (Map.Entry<String, String> entry : params.entrySet()) {
+                        jsonBody.put(entry.getKey(), entry.getValue());
+                    }
+                }
+                if (paramsB != null) {
+                    for (Map.Entry<String, Boolean> entry : paramsB.entrySet()) {
+                        jsonBody.put(entry.getKey(), entry.getValue());
+                    }
+                }
+
+                System.out.println("JSON Body: " + jsonBody.toString());
+
+                // Отправка тела запроса
+                OutputStream outputStream = connection.getOutputStream();
+                outputStream.write(jsonBody.toString().getBytes(StandardCharsets.UTF_8));
+                outputStream.flush();
+                outputStream.close();
+
+                // Чтение ответа
+                int responseCode = connection.getResponseCode();
+                InputStream inputStream = (responseCode == HttpURLConnection.HTTP_OK)
+                        ? connection.getInputStream()
+                        : connection.getErrorStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+                StringBuilder responseBody = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    responseBody.append(line.trim());
+                }
+                reader.close();
+
+                System.out.println("Response Code: " + responseCode);
+                System.out.println("Response Body: " + responseBody.toString());
+
+                // Передача результата в UI
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    try {
+                        callback.onResponse(new Response(responseCode, responseBody.toString()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    try {
+                        callback.onResponse(new Response(-1, e.getMessage()));
+                    } catch (JSONException ex) {
+                        ex.printStackTrace();
+                    }
+                });
             } finally {
                 if (connection != null) {
                     connection.disconnect();
